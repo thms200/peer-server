@@ -1,8 +1,7 @@
 const express = require('express');
 const router = express.Router();
+const usersController = require('../controller/users.controller');
 
-router.get('/', (req, res) => {
-  res.send('respond with a resource in users');
-});
+router.post('/login', usersController.getLoginOrSignup);
 
 module.exports = router;
