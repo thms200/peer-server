@@ -1,8 +1,7 @@
 const express = require('express');
 const router = express.Router();
+const customersController = require('../controller/customers.controller');
 
-router.get('/', (req, res) => {
-  res.send('respond with a resource in customers');
-});
+router.post('/', customersController.getCutomer);
 
 module.exports = router;

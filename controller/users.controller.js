@@ -9,19 +9,24 @@ exports.getLoginOrSignup = async(req, res) => {
     const secretKey = process.env.SECRET_KEY;
     const options = { expiresIn: '1d', issuer: 'minsun' };
     const payload = {};
+
     if (!user) {
       const newUser = await User.create({ email, picture_url, name });
-      if (!newUser) return res.status(401).json({ result: 'ng', errMessage: errorMsg.invalidSignup });
+      if (!newUser) return res.status(404).json({ result: 'ng', errMessage: errorMsg.invalidSignup });
       payload.name = newUser.name;
       payload.picture = newUser.picture_url;
       payload.id = newUser._id;
-    } else  {
+      const token = jwt.sign(payload, secretKey, options);
+      return res.status(201).json({ result: 'ok', token, userInfo: payload });
+    }
+
+    if (user) {
       payload.name = user.name;
       payload.picture = user.picture_url;
       payload.id = user._id;
+      const token = jwt.sign(payload, secretKey, options);
+      return res.status(200).json({ result: 'ok', token, userInfo: payload });
     }
-    const token = jwt.sign(payload, secretKey, options);
-    return res.status(201).json({ result: 'ok', token, userInfo: payload });
   } catch(err) {
     return res.status(400).json({ result: 'ng', errMessage: errorMsg.invalidLogin });
   }
