@@ -1,5 +1,7 @@
 const Customer = require('../models/Customers');
 const { errorMsg } = require('../constants');
+const mongoose = require('mongoose');
+
 
 exports.getCutomer = async(req, res) => {
   try {
@@ -18,7 +20,12 @@ exports.getCutomer = async(req, res) => {
     if (!customerByName || !customerByEmail) {
       const trimNickname = nickname.trim();
       const trimEmail = email.trim();
-      const newCustomer = await Customer.create({ nickname: trimNickname, email: trimEmail, consultant });
+      const objectId = mongoose.Types.ObjectId(consultant);
+      const newCustomer = await Customer.create({
+        nickname: trimNickname,
+        email: trimEmail,
+        consultant: objectId
+      });
       if (!newCustomer) return res.status(404).json({ result: 'ng', errMessage: errorMsg.failNewCustomer });
       return res.status(201).json({ result: 'ok' });
     }
