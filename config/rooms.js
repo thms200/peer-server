@@ -31,8 +31,24 @@ const removeCustomerRoom = (nickname, consultant) => {
     }
   }
 
-  return Object.keys(leftCustomer[0])[0];
+  return !leftCustomer.length ? null : Object.keys(leftCustomer[0])[0];
 };
 
-module.exports = { roomList, arrangeCustomerRoom, removeCustomerRoom };
+const getCustomers = (consultant) => roomList[consultant];
 
+const arrangeConsultantRoom = (consultant) => {
+  for (let seller in roomList) {
+    if (consultant === seller) {
+      const customer = roomList[seller].shift();
+      return Object.keys(customer)[0];
+    }
+  }
+};
+
+module.exports = {
+  roomList,
+  arrangeCustomerRoom,
+  removeCustomerRoom,
+  getCustomers,
+  arrangeConsultantRoom,
+};
