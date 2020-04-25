@@ -7,6 +7,10 @@ const createError = require('http-errors');
 const { errorMsg } = require('./constants');
 
 const app = express();
+const server = require('http').createServer(app);
+const io = require('socket.io')(server);
+require('./config/socket')(io);
+
 app.use(cors());
 
 mongoose.connect(process.env.ATLAS_URI, {
@@ -24,6 +28,8 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use('/api/users', require('./routes/users'));
 app.use('/api/customers', require('./routes/customers'));
+
+server.listen(process.env.PORT, () => console.log('server connection..'));
 
 app.use((req, res, next) => {
   next(createError(404), errorMsg.invalidUrl);
