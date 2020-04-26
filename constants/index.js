@@ -7,6 +7,7 @@ const errorMsg = {
   invalidToken: 'There was a error with login. Please login again.',
   failNewCustomer: 'We can\'t create new customer for unknown reasons',
   failCustomer: 'This is a duplicate nickname or email. Or The email and nickname you entered is different from the one you previously entered.',
+  invalidEmail: 'You should input email. Try again.',
 };
 
 module.exports = { errorMsg };
