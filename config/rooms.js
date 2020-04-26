@@ -46,6 +46,7 @@ const arrangeConsultantRoom = (consultant) => {
   for (let seller in roomList) {
     if (trimmedConsultant === seller) {
       const customer = roomList[seller].shift();
+      if (!customer) return null;
       return Object.keys(customer)[0];
     }
   }
