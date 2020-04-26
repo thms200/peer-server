@@ -21,7 +21,7 @@ module.exports = (io) => {
         const consultantId = findConsultant(consultant);
         if(consultantId) {
           const currentCustomers = getCustomers(consultant);
-          socket.to(consultantId).emit('currentCustomers', currentCustomers);
+          io.to(consultantId).emit('currentCustomers', currentCustomers);
         }
 
         callback(`${nickname}님, 잠시만 기다려주시면 상담을 시작하겠습니다.`);
@@ -45,7 +45,7 @@ module.exports = (io) => {
       try {
         addConsultants(consultant, socket.id);
         const currentCustomers = getCustomers(consultant);
-        socket.to(socket.id).emit('currentCustomers', currentCustomers);
+        io.to(socket.id).emit('currentCustomers', currentCustomers);
         callback('상담모드가 시작되었습니다. Start를 누르시면 상담이 시작됩니다.');
       } catch (error) {
         console.warn(error);
