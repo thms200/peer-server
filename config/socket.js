@@ -13,9 +13,10 @@ const {
 
 module.exports = (io) => {
   io.on('connection', (socket) => {
-    socket.on('joinCustomer', (nickname, mode, consultant, callback) => {
+    socket.on('joinCustomer', (customerInfo, callback) => {
       try {
-        const room = arrangeCustomerRoom(nickname, mode, consultant);
+        const { nickname, consultant } = customerInfo;
+        const room = arrangeCustomerRoom(customerInfo, socket.id);
         socket.join(room);
 
         const consultantId = findConsultant(consultant);
@@ -24,7 +25,7 @@ module.exports = (io) => {
           io.to(consultantId).emit('currentCustomers', currentCustomers);
         }
 
-        callback(`${nickname}님, 잠시만 기다려주시면 상담을 시작하겠습니다.`);
+        callback( `${nickname}님, 잠시만 기다려주시면 상담을 시작하겠습니다.` );
       } catch (error) {
         console.warn(error);
       }
@@ -48,7 +49,7 @@ module.exports = (io) => {
       }
     });
 
-    socket.on('onConsultant', (consultant, callback) => {
+    socket.on('onConsulting', (consultant, callback) => {
       try {
         addConsultants(consultant, socket.id);
         const currentCustomers = getCustomers(consultant);
@@ -61,12 +62,21 @@ module.exports = (io) => {
 
     socket.on('startConsulting', (consultant, callback) => {
       try {
-        const customer = arrangeConsultantRoom(consultant);
-        if (customer === null) return callback({ message: '더이상 대기 중인 고객이 없습니다.' });
-        socket.join(customer);
+        const customerInfo = arrangeConsultantRoom(consultant);
+        if (customerInfo === null) return callback({ message: '더이상 대기 중인 고객이 없습니다.' });
+        socket.join(customerInfo.nickname);
+
         const currentCustomers = getCustomers(consultant);
         io.to(socket.id).emit('currentCustomers', currentCustomers);
-        callback({ customer, message: `${customer}님과 연결되었습니다.` });
+        callback({ customerInfo, message: `${customerInfo.nickname}님과 연결되었습니다.` });
+      } catch (error) {
+        console.warn(error);
+      }
+    });
+
+    socket.on('acceptCustomer', (data) => {
+      try {
+        io.to(data.to).emit('acceptConsultant', data.signal);
       } catch (error) {
         console.warn(error);
       }

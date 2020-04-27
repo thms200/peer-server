@@ -1,18 +1,23 @@
 const roomList = {};
 
-const arrangeCustomerRoom = (nickname, mode, consultant) => {
+const arrangeCustomerRoom = (customerInfo, id) => {
+  const { nickname, mode, consultant, signal } = customerInfo;
   const trimmedName = nickname.trim();
   const trimmedConsultant = consultant.trim();
-  const customer = {};
-  customer[trimmedName] = mode;
+  const newCustomer = {
+    nickname: trimmedName,
+    consultant: trimmedConsultant,
+    mode,
+    signal,
+    id,
+  };
   for (let seller in roomList) {
     if (trimmedConsultant === seller) {
-      roomList[seller].push(customer);
+      roomList[seller].push(newCustomer);
       return trimmedName;
     }
   }
-
-  roomList[trimmedConsultant] = [customer];
+  roomList[trimmedConsultant] = [newCustomer];
   return trimmedName;
 };
 
@@ -25,7 +30,7 @@ const removeCustomerRoom = (nickname, consultant) => {
     if (trimmedConsultant === seller) {
       const customers = roomList[seller];
       for (let i = 0; i < customers.length; i++) {
-        if (Object.keys(customers[i])[0] === trimmedName) {
+        if (customers[i].nickname === trimmedName) {
           leftCustomer = customers.splice(i, 1);
           break;
         }
@@ -33,7 +38,7 @@ const removeCustomerRoom = (nickname, consultant) => {
     }
   }
 
-  return !leftCustomer.length ? null : Object.keys(leftCustomer[0])[0];
+  return !leftCustomer.length ? null : leftCustomer[0].nickname;
 };
 
 const getCustomers = (consultant) => {
@@ -47,9 +52,10 @@ const arrangeConsultantRoom = (consultant) => {
     if (trimmedConsultant === seller) {
       const customer = roomList[seller].shift();
       if (!customer) return null;
-      return Object.keys(customer)[0];
+      return customer;
     }
   }
+  return null;
 };
 
 module.exports = {
