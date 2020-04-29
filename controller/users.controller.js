@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken');
 const User = require('../models/Users');
 const { errorMsg } = require('../constants');
+const  { saveAudio } = require('../middlewares/uploadAudio');
 
 exports.getLoginOrSignup = async(req, res) => {
   try {
@@ -29,5 +30,18 @@ exports.getLoginOrSignup = async(req, res) => {
     }
   } catch(err) {
     return res.status(400).json({ result: 'ng', errMessage: errorMsg.invalidLogin });
+  }
+};
+
+exports.getAudio = async(req, res) => {
+  try {
+    const { buffer } = req.file;
+    const { timeStamp, customer, isFinal } = req.body;
+    const url = await saveAudio(buffer, timeStamp, customer, isFinal);
+    if (!url) return res.send('not yet, not final');//
+    return res.send({ 'DB process!!': url });//
+  } catch(err) {
+    console.log(err);
+    return res.status(400).json({ result: 'ng', errMessage: errorMsg.failSaveAudio });
   }
 };

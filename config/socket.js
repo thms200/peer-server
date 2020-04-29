@@ -82,11 +82,10 @@ module.exports = (io) => {
       }
     });
 
-    socket.on('endConsulting', (callback) => {
+    socket.on('endConsulting', (nickname, callback) => {
       try {
-        const customer = Object.keys(socket.rooms)[1];
-        socket.leave(customer);
-        callback(`${customer}님과의 상담이 종료되었습니다. 다음 상담을 진행하시려면 Start를 클릭하세요.`);
+        socket.leave(nickname);
+        callback(`${nickname}님과의 상담이 종료되었습니다. 다음 상담을 진행하시려면 Start를 클릭하세요.`);
       } catch (error) {
         console.warn(error);
       }

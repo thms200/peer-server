@@ -8,6 +8,7 @@ const errorMsg = {
   failNewCustomer: 'We can\'t create new customer for unknown reasons',
   failCustomer: 'This is a duplicate nickname or email. Or The email and nickname you entered is different from the one you previously entered.',
   invalidEmail: 'You should input email. Try again.',
+  failSaveAudio: 'We can\'t sign up for unknown reasons',
 };
 
 module.exports = { errorMsg };
