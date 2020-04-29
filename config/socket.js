@@ -20,12 +20,12 @@ module.exports = (io) => {
         socket.join(room);
 
         const consultantId = findConsultant(consultant);
-        if(consultantId) {
+        if (consultantId) {
           const currentCustomers = getCustomers(consultant);
           io.to(consultantId).emit('currentCustomers', currentCustomers);
         }
 
-        callback( `${nickname}님, 잠시만 기다려주시면 상담을 시작하겠습니다.` );
+        callback(`${nickname}님, 잠시만 기다려주시면 상담을 시작하겠습니다.`);
       } catch (error) {
         console.warn(error);
       }
@@ -38,7 +38,7 @@ module.exports = (io) => {
         socket.leave(leaveCustomer);
 
         const consultantId = findConsultant(consultant);
-        if(consultantId) {
+        if (consultantId) {
           const currentCustomers = getCustomers(consultant);
           io.to(consultantId).emit('currentCustomers', currentCustomers);
         }
