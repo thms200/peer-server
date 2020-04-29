@@ -84,7 +84,6 @@ module.exports = (io) => {
 
     socket.on('endConsulting', (nickname, callback) => {
       try {
-        console.log(nickname);
         socket.leave(nickname);
         callback(`${nickname}님과의 상담이 종료되었습니다. 다음 상담을 진행하시려면 Start를 클릭하세요.`);
       } catch (error) {
