@@ -60,5 +60,11 @@ module.exports = {
     "space-before-function-paren":[
       "error", "never"
     ],
+    "keyword-spacing": [
+      "error",
+      {
+        "before": true
+      }
+    ]
   }
 };
