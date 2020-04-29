@@ -13,7 +13,7 @@ const consultingSchema = new mongoose.Schema({
   },
   contents: {
     type: Map,
-    of: Array,
+    of: String,
     required: true,
   },
 });
