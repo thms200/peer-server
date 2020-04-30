@@ -2,8 +2,9 @@ const jwt = require('jsonwebtoken');
 const User = require('../models/Users');
 const Customer = require('../models/Customers');
 const Consulting = require('../models/Consultings');
-const { errorMsg } = require('../constants');
 const  { saveAudio } = require('../middlewares/uploadAudio');
+const { processConsultingList } = require('../util');
+const { errorMsg } = require('../constants');
 
 exports.getLoginOrSignup = async(req, res) => {
   try {
@@ -31,6 +32,7 @@ exports.getLoginOrSignup = async(req, res) => {
       return res.status(200).json({ result: 'ok', token, userInfo: payload });
     }
   } catch (err) {
+    console.warn(err);
     return res.status(400).json({ result: 'ng', errMessage: errorMsg.invalidLogin });
   }
 };
@@ -42,9 +44,10 @@ exports.getAuth = async(req, res) => {
     const payload = await jwt.verify(token, secretKey);
     return res.status(200).json({ result: 'ok', token, userInfo: payload });
   } catch (err) {
+    console.warn(err);
     const { name } = err;
     if (name === 'TokenExpiredError') return res.status(401).json({ result: 'ng', errMessage: errorMsg.tokenExpired });
-    res.status(400).json({ result: 'ng', errMessage: errorMsg.invalidToken });
+    return res.status(400).json({ result: 'ng', errMessage: errorMsg.invalidToken });
   }
 };
 
@@ -77,7 +80,31 @@ exports.saveAudio = async(req, res) => {
     }
     return res.status(400).json({ result: 'ng', errMessage: errorMsg.failSaveAudio });
   } catch (err) {
-    console.log(err);
+    console.warn(err);
+    return res.status(400).json({ result: 'ng', errMessage: errorMsg.failSaveAudio });
+  }
+};
+
+exports.getConsultings = async(req, res) => {
+  try {
+    const { customer } = req.query;
+    const seller = res.locals.userInfo.id;
+    let consultings = await Consulting.find({ seller }).populate('customer');
+    if (!consultings) return res.status(400).json({ result: 'ng', errMessage: errorMsg.noneConsultings });
+
+    if (customer !== 'all') {
+      const customerInfo = await Customer.findOne({ nickname: customer });
+      if (!customerInfo) return res.status(400).json({ result: 'ng', errMessage: errorMsg.noneCustomer });
+      consultings =
+        await Consulting
+          .find({ customer: { $eq: customerInfo._id }, seller })
+          .populate('customer');
+    }
+
+    consultings = processConsultingList(consultings);
+    return res.status(200).send(consultings);
+  } catch (err) {
+    console.warn(err);
     return res.status(400).json({ result: 'ng', errMessage: errorMsg.failSaveAudio });
   }
 };

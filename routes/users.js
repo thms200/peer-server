@@ -7,5 +7,6 @@ const usersController = require('../controller/users.controller');
 router.post('/login', usersController.getLoginOrSignup);
 router.post('/auth', usersController.getAuth);
 router.post('/:user_id/consultings', ensureAuthenticated, upload.single('audio'), usersController.saveAudio);
+router.get('/:user_id/consultings', ensureAuthenticated, usersController.getConsultings);
 
 module.exports = router;
