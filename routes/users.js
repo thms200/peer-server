@@ -5,6 +5,7 @@ const { upload } = require('../middlewares/uploadAudio');
 const usersController = require('../controller/users.controller');
 
 router.post('/login', usersController.getLoginOrSignup);
-router.post('/:user_id/consultings', ensureAuthenticated, upload.single('audio'), usersController.getAudio);
+router.post('/auth', usersController.getAuth);
+router.post('/:user_id/consultings', ensureAuthenticated, upload.single('audio'), usersController.saveAudio);
 
 module.exports = router;
