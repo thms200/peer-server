@@ -32,7 +32,7 @@ exports.getCutomer = async(req, res) => {
         consultant: trimConsultant,
         consulting: [],
       });
-      if (!newCustomer) return res.status(404).json({ result: 'ng', errMessage: errorMsg.failNewCustomer });
+      if (!newCustomer) return res.status(400).json({ result: 'ng', errMessage: errorMsg.failNewCustomer });
       return res.status(201).json({ result: 'ok' });
     }
   } catch (err) {

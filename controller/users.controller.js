@@ -15,7 +15,7 @@ exports.getLoginOrSignup = async(req, res) => {
 
     if (!user) {
       const newUser = await User.create({ email, picture_url, name });
-      if (!newUser) return res.status(404).json({ result: 'ng', errMessage: errorMsg.invalidSignup });
+      if (!newUser) return res.status(400).json({ result: 'ng', errMessage: errorMsg.invalidSignup });
       payload.name = newUser.name;
       payload.picture = newUser.picture_url;
       payload.id = newUser._id;
@@ -35,12 +35,12 @@ exports.getLoginOrSignup = async(req, res) => {
   }
 };
 
-exports.getAudio = async(req, res) => {
+exports.saveAudio = async(req, res) => {
   try {
     const { buffer, originalname } = req.file;
     const { isFinal, customer } = req.body;
     const customerInfo = await Customer.findOne({ nickname: customer });
-    if (!customerInfo) return res.status(403).json({ result: 'ng', errMessage: errorMsg.invalidCustomer });
+    if (!customerInfo) return res.status(400).json({ result: 'ng', errMessage: errorMsg.invalidCustomer });
 
     const timeStamp = Date.now().toString();
     const url = await saveAudio(buffer, originalname, isFinal, timeStamp);
@@ -62,9 +62,9 @@ exports.getAudio = async(req, res) => {
       await customerInfo.save();
       return res.status(201).json({ result: 'ok' });
     }
-    return res.status(404).json({ result: 'ng', errMessage: errorMsg.failSaveAudio });
+    return res.status(400).json({ result: 'ng', errMessage: errorMsg.failSaveAudio });
   } catch (err) {
     console.log(err);
-    return res.status(404).json({ result: 'ng', errMessage: errorMsg.failSaveAudio });
+    return res.status(400).json({ result: 'ng', errMessage: errorMsg.failSaveAudio });
   }
 };
