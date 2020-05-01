@@ -54,7 +54,7 @@ exports.getAuth = async(req, res) => {
 exports.saveAudio = async(req, res) => {
   try {
     const { buffer, originalname } = req.file;
-    const { isFinal, customer } = req.body;
+    const { customer, isFinal, isVoice } = req.body;
     const customerInfo = await Customer.findOne({ nickname: customer });
     if (!customerInfo) return res.status(400).json({ result: 'ng', errMessage: errorMsg.invalidCustomer });
 
@@ -70,6 +70,7 @@ exports.saveAudio = async(req, res) => {
         seller,
         customer: customerInfo._id,
         contents: {},
+        isVoice,
       });
       newConsulting.contents.set(timeStamp, url);
       await newConsulting.save();

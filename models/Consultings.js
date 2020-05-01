@@ -16,6 +16,10 @@ const consultingSchema = new mongoose.Schema({
     of: String,
     required: true,
   },
+  isVoice: {
+    type: Boolean,
+    required: true,
+  }
 });
 
 module.exports = mongoose.model('Consulting', consultingSchema);

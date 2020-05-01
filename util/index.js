@@ -7,12 +7,12 @@ const isEmail = (asValue) => {
 const processConsultingList = (consultings) => {
   const result = [];
   consultings.forEach(consulting => {
-    const { customer, contents } = consulting;
+    const { customer, contents, isVoice } = consulting;
     const { nickname, email } = customer;
     const contentsInfo = contents.entries().next().value;
     const timestamp = Number(contentsInfo[0]);
     const audio = contentsInfo[1];
-    const consultingInfo = { name: nickname, email, timestamp, audio };
+    const consultingInfo = { name: nickname, email, timestamp, audio, isVoice };
     result.push(consultingInfo);
   });
   return result;
