@@ -10,7 +10,7 @@ exports.getCutomer = async(req, res) => {
     const trimEmail = email.trim();
     const trimConsultant = consultant.trim();
 
-    if(!isEmail(trimEmail)) {
+    if (!isEmail(trimEmail)) {
       return res.status(400).json({ result: 'ng', errMessage: errorMsg.invalidEmail });
     }
 
@@ -30,11 +30,12 @@ exports.getCutomer = async(req, res) => {
         nickname: trimNickname,
         email: trimEmail,
         consultant: trimConsultant,
+        consulting: [],
       });
-      if (!newCustomer) return res.status(404).json({ result: 'ng', errMessage: errorMsg.failNewCustomer });
+      if (!newCustomer) return res.status(400).json({ result: 'ng', errMessage: errorMsg.failNewCustomer });
       return res.status(201).json({ result: 'ok' });
     }
-  } catch(err) {
+  } catch (err) {
     return res.status(400).json({ result: 'ng', errMessage: errorMsg.generalError });
   }
 };

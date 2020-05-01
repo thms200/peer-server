@@ -10,7 +10,7 @@ const s3 = new AWS.S3({
 
 const upload = multer();
 
-const saveAudio = async(buffer, timeStamp, customer, isFinal) => {
+const saveAudio = async(buffer, customer, isFinal, timeStamp) => {
   const beforeBuffer = tempBuffers[customer];
   const mergedBuffer = beforeBuffer
     ? Buffer.concat([beforeBuffer, buffer])
@@ -33,7 +33,7 @@ const saveAudio = async(buffer, timeStamp, customer, isFinal) => {
         delete tempBuffers[customer];
         return result.Location;
       }
-    } catch(err) {
+    } catch (err) {
       console.warn(err);
     }
   }

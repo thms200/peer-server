@@ -9,6 +9,9 @@ const errorMsg = {
   failCustomer: 'This is a duplicate nickname or email. Or The email and nickname you entered is different from the one you previously entered.',
   invalidEmail: 'You should input email. Try again.',
   failSaveAudio: 'We can\'t sign up for unknown reasons',
+  invalidCustomer: 'we can\'t save consulting audio because we can\'t find your customer.',
+  noneCustomer: 'we can\'t find your selected customer.',
+  noneConsultings: 'we can\'t find your consulting history.'
 };
 
 module.exports = { errorMsg };

@@ -13,9 +13,13 @@ const consultingSchema = new mongoose.Schema({
   },
   contents: {
     type: Map,
-    of: Array,
+    of: String,
     required: true,
   },
+  isVoice: {
+    type: Boolean,
+    required: true,
+  }
 });
 
 module.exports = mongoose.model('Consulting', consultingSchema);
