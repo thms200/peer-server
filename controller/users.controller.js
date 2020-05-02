@@ -4,7 +4,7 @@ const Customer = require('../models/Customers');
 const Consulting = require('../models/Consultings');
 const  { saveAudio } = require('../middlewares/uploadAudio');
 const { processConsultingList } = require('../util');
-const { errorMsg } = require('../constants');
+const { ERROR } = require('../constants');
 
 exports.getLoginOrSignup = async(req, res) => {
   try {
@@ -16,12 +16,12 @@ exports.getLoginOrSignup = async(req, res) => {
 
     if (!user) {
       const newUser = await User.create({ email, picture_url, name });
-      if (!newUser) return res.status(400).json({ result: 'ng', errMessage: errorMsg.invalidSignup });
+      if (!newUser) return res.status(400).json({ errMessage: ERROR.INVALID_SIGNUP });
       payload.name = newUser.name;
       payload.picture = newUser.picture_url;
       payload.id = newUser._id;
       const token = jwt.sign(payload, secretKey, options);
-      return res.status(201).json({ result: 'ok', token, userInfo: payload });
+      return res.status(201).json({ token, userInfo: payload });
     }
 
     if (user) {
@@ -29,11 +29,11 @@ exports.getLoginOrSignup = async(req, res) => {
       payload.picture = user.picture_url;
       payload.id = user._id;
       const token = jwt.sign(payload, secretKey, options);
-      return res.status(200).json({ result: 'ok', token, userInfo: payload });
+      return res.status(200).json({ token, userInfo: payload });
     }
   } catch (err) {
     console.warn(err);
-    return res.status(400).json({ result: 'ng', errMessage: errorMsg.invalidLogin });
+    return res.status(400).json({ errMessage: ERROR.INVALID_LOGIN });
   }
 };
 
@@ -42,12 +42,12 @@ exports.getAuth = async(req, res) => {
     const token = req.headers['x-access-token'].split('Bearer')[1].trim();
     const secretKey = process.env.SECRET_KEY;
     const payload = await jwt.verify(token, secretKey);
-    return res.status(200).json({ result: 'ok', token, userInfo: payload });
+    return res.status(200).json({ userInfo: payload });
   } catch (err) {
     console.warn(err);
     const { name } = err;
-    if (name === 'TokenExpiredError') return res.status(401).json({ result: 'ng', errMessage: errorMsg.tokenExpired });
-    return res.status(400).json({ result: 'ng', errMessage: errorMsg.invalidToken });
+    if (name === 'TokenExpiredError') return res.status(401).json({ errMessage: ERROR.TOKEN_EXPIRED });
+    return res.status(400).json({ errMessage: ERROR.INVALID_TOKEN });
   }
 };
 
@@ -56,13 +56,13 @@ exports.saveAudio = async(req, res) => {
     const { buffer, originalname } = req.file;
     const { customer, isFinal, isVoice } = req.body;
     const customerInfo = await Customer.findOne({ nickname: customer });
-    if (!customerInfo) return res.status(400).json({ result: 'ng', errMessage: errorMsg.invalidCustomer });
+    if (!customerInfo) return res.status(400).json({ errMessage: ERROR.INVALID_CUSTOMER });
 
     const timeStamp = Date.now().toString();
     const url = await saveAudio(buffer, originalname, isFinal, timeStamp);
 
     const isLastBlob = isFinal === 'true';
-    if (!isLastBlob) return res.status(201).json({ result: 'ok', process: 'saving blob' });
+    if (!isLastBlob) return res.status(201).json({ result: 'saving blob' });
 
     if (isLastBlob && url) {
       const seller = res.locals.userInfo.id;
@@ -79,10 +79,10 @@ exports.saveAudio = async(req, res) => {
       await customerInfo.save();
       return res.status(201).json({ result: 'ok' });
     }
-    return res.status(400).json({ result: 'ng', errMessage: errorMsg.failSaveAudio });
+    return res.status(400).json({ errMessage: ERROR.FAIL_SAVE_AUDIO });
   } catch (err) {
     console.warn(err);
-    return res.status(400).json({ result: 'ng', errMessage: errorMsg.failSaveAudio });
+    return res.status(400).json({  errMessage: ERROR.FAIL_SAVE_AUDIO });
   }
 };
 
@@ -91,11 +91,11 @@ exports.getConsultings = async(req, res) => {
     const { customer } = req.query;
     const seller = res.locals.userInfo.id;
     let consultings = await Consulting.find({ seller }).populate('customer');
-    if (!consultings) return res.status(400).json({ result: 'ng', errMessage: errorMsg.noneConsultings });
+    if (!consultings) return res.status(400).json({ errMessage: ERROR.NONE_CONSULTINGS });
 
     if (customer !== 'all') {
       const customerInfo = await Customer.findOne({ nickname: customer });
-      if (!customerInfo) return res.status(400).json({ result: 'ng', errMessage: errorMsg.noneCustomer });
+      if (!customerInfo) return res.status(400).json({ errMessage: ERROR.NONE_CUSTOMER });
       consultings =
         await Consulting
           .find({ customer: { $eq: customerInfo._id }, seller })
@@ -106,6 +106,6 @@ exports.getConsultings = async(req, res) => {
     return res.status(200).send(consultings);
   } catch (err) {
     console.warn(err);
-    return res.status(400).json({ result: 'ng', errMessage: errorMsg.failSaveAudio });
+    return res.status(400).json({ errMessage: ERROR.GENERAL_ERROR });
   }
 };

@@ -1,17 +1,16 @@
 const Customer = require('../models/Customers');
-const { errorMsg } = require('../constants');
+const { ERROR } = require('../constants');
 const { isEmail } = require('../util');
 
 
 exports.getCutomer = async(req, res) => {
   try {
-    const { nickname, email, consultant } = req.body;
+    const { nickname, email, consultantId } = req.body;
     const trimNickname = nickname.trim();
     const trimEmail = email.trim();
-    const trimConsultant = consultant.trim();
-
+    const trimconsultantId = consultantId.trim();
     if (!isEmail(trimEmail)) {
-      return res.status(400).json({ result: 'ng', errMessage: errorMsg.invalidEmail });
+      return res.status(400).json({ errMessage: ERROR.INVALID_EMAIL });
     }
 
     const customerByName = await Customer.findOne({ nickname: trimNickname });
@@ -22,20 +21,21 @@ exports.getCutomer = async(req, res) => {
         = customerByName && (trimEmail === customerByName.email) ||
           customerByEmail && (trimNickname === customerByEmail.nickname);
       if (isSameCustomer) return res.status(200).json({ result: 'ok' });
-      return res.status(403).json({ result: 'ng', errMessage: errorMsg.failCustomer });
+      return res.status(403).json({ errMessage: ERROR.FAIL_CUSTOMER });
     }
 
     if (!customerByName || !customerByEmail) {
       const newCustomer = await Customer.create({
         nickname: trimNickname,
         email: trimEmail,
-        consultant: trimConsultant,
+        consultant: trimconsultantId,
         consulting: [],
       });
-      if (!newCustomer) return res.status(400).json({ result: 'ng', errMessage: errorMsg.failNewCustomer });
+      if (!newCustomer) return res.status(400).json({ errMessage: ERROR.FAIL_NEW_CUSTOMER });
       return res.status(201).json({ result: 'ok' });
     }
   } catch (err) {
-    return res.status(400).json({ result: 'ng', errMessage: errorMsg.generalError });
+    console.log(err);
+    return res.status(400).json({ errMessage: ERROR.GENERAL_ERROR });
   }
 };
