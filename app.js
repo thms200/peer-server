@@ -4,7 +4,7 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const createError = require('http-errors');
-const { errorMsg } = require('./constants');
+const { ERROR } = require('./constants');
 
 const app = express();
 const server = require('http').createServer(app);
@@ -32,12 +32,12 @@ app.use('/api/customers', require('./routes/customers'));
 server.listen(process.env.PORT, () => console.log('server connection..'));
 
 app.use((req, res, next) => {
-  next(createError(404), errorMsg.invalidUrl);
+  next(createError(404), ERROR.INVALID_URL);
 });
 
 app.use((err, req, res) => {
   res.status(err.status || 500);
-  const errMessage = err.message || errorMsg.generalError;
+  const errMessage = err.message || ERROR.GENERAL_ERROR;
   res.send({ errMessage });
 });
 
