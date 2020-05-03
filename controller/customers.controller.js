@@ -5,10 +5,10 @@ const { isEmail } = require('../util');
 
 exports.getCutomer = async(req, res) => {
   try {
-    const { nickname, email, consultantId } = req.body;
+    const { nickname, email, consultant } = req.body;
     const trimNickname = nickname.trim();
     const trimEmail = email.trim();
-    const trimconsultantId = consultantId.trim();
+    const trimconsultantId = consultant.trim();
     if (!isEmail(trimEmail)) {
       return res.status(400).json({ errMessage: ERROR.INVALID_EMAIL });
     }
