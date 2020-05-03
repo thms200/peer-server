@@ -17,6 +17,7 @@ describe('<POST /api/customers>', function() {
       .expect('Content-Type', /json/)
       .expect(200)
       .end((err, res) => {
+        if (err) return done(err);
         expect(res.body.result).to.eql('ok');
         done();
       });
@@ -33,6 +34,7 @@ describe('<POST /api/customers>', function() {
       .expect('Content-Type', /json/)
       .expect(400)
       .end((err, res) => {
+        if (err) return done(err);
         expect(res.body.errMessage).to.eql(ERROR.INVALID_EMAIL);
         done();
       });
@@ -49,6 +51,7 @@ describe('<POST /api/customers>', function() {
       .expect('Content-Type', /json/)
       .expect(403)
       .end((err, res) => {
+        if (err) return done(err);
         expect(res.body.errMessage).to.eql(ERROR.FAIL_CUSTOMER);
         done();
       });
@@ -68,6 +71,7 @@ describe('<POST /api/customers>', function() {
       .expect('Content-Type', /json/)
       .expect(201)
       .end(async(err, res) => {
+        if (err) return done(err);
         expect(res.body.result).to.eql('ok');
         const newCustomer = await Customer.findOne({ email: '123123@test.com' });
         expect(newCustomer.nickname).to.eql('123123');
