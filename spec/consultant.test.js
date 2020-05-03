@@ -29,7 +29,7 @@ describe('<function addConsultants>', () => {
     expect(consultantList[mockConsultantTwo]).to.eql('ekx9wj20s');
   });
 
-  it('should be added the inputed consultant even if consultant include spaces', () => {
+  it('should be added the inputed consultant even if consultant id has spaces', () => {
     const mockTrim = mockConsultantThree.trim();
     expect(Object.keys(consultantList)[2]).to.eql('2938skwk0sk');
     expect(consultantList[mockConsultantThree]).to.eql(undefined);
@@ -75,7 +75,7 @@ describe('<function removeConsultant>', () => {
     expect(consultantList[mockConsultantTwo]).to.eql(undefined);
   });
 
-  it('should be removed the inputed consultant even if the consultant include spaces', () => {
+  it('should be removed the inputed consultant even if consultant id has spaces', () => {
     const mockTrim = mockConsultantThree.trim();
     expect(consultantList[mockTrim]).to.eql('al12k09zka');
     removeConsultant(mockConsultantThree);
