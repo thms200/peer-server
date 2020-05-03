@@ -29,7 +29,7 @@ const mockCustomerInfoThree = {
 };
 const mockSocketIdThree = 'dk38xjalwo';
 
-describe('<room in config>', () => {
+describe('<Room in config>', () => {
   let roomOne;
   let roomTwo;
   let roomThree;

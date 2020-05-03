@@ -40,4 +40,4 @@ const saveAudio = async(buffer, customer, isFinal, timeStamp) => {
   return false;
 };
 
-module.exports = { upload, saveAudio };
+module.exports = { tempBuffers, upload, saveAudio };
