@@ -35,7 +35,6 @@ exports.getCutomer = async(req, res) => {
       return res.status(201).json({ result: 'ok' });
     }
   } catch (err) {
-    console.log(err);
     return res.status(400).json({ errMessage: ERROR.GENERAL_ERROR });
   }
 };

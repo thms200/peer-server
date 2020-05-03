@@ -32,7 +32,6 @@ exports.getLoginOrSignup = async(req, res) => {
       return res.status(200).json({ token, userInfo: payload });
     }
   } catch (err) {
-    console.warn(err);
     return res.status(400).json({ errMessage: ERROR.INVALID_LOGIN });
   }
 };
@@ -44,7 +43,6 @@ exports.getAuth = async(req, res) => {
     const payload = await jwt.verify(token, secretKey);
     return res.status(200).json({ userInfo: payload });
   } catch (err) {
-    console.warn(err);
     const { name } = err;
     if (name === 'TokenExpiredError') return res.status(401).json({ errMessage: ERROR.TOKEN_EXPIRED });
     return res.status(400).json({ errMessage: ERROR.INVALID_TOKEN });
@@ -81,7 +79,6 @@ exports.saveAudio = async(req, res) => {
     }
     return res.status(400).json({ errMessage: ERROR.FAIL_SAVE_AUDIO });
   } catch (err) {
-    console.warn(err);
     return res.status(400).json({  errMessage: ERROR.FAIL_SAVE_AUDIO });
   }
 };
@@ -105,7 +102,6 @@ exports.getConsultings = async(req, res) => {
     consultings = processConsultingList(consultings);
     return res.status(200).send(consultings);
   } catch (err) {
-    console.warn(err);
     return res.status(400).json({ errMessage: ERROR.GENERAL_ERROR });
   }
 };
