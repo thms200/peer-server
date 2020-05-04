@@ -1,0 +1,20 @@
+branch-defaults:
+  dev:
+    environment: Peer-env
+environment-defaults:
+  Peer-env:
+    branch: null
+    repository: null
+global:
+  application_name: peer
+  default_ec2_keyname: null
+  default_platform: arn:aws:elasticbeanstalk:ap-northeast-2::platform/Node.js 12 running
+    on 64bit Amazon Linux 2/5.0.0
+  default_region: ap-northeast-2
+  include_git_submodules: true
+  instance_profile: null
+  platform_name: null
+  platform_version: null
+  profile: null
+  sc: git
+  workspace_type: Application
