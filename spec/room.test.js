@@ -4,7 +4,8 @@ const {
   arrangeCustomerRoom,
   removeCustomerRoom,
   getCustomers,
-  arrangeConsultantRoom
+  arrangeConsultantRoom,
+  disconnectCustomer,
 } = require('../config/rooms');
 
 const mockCustomerInfoOne = {
@@ -117,6 +118,20 @@ describe('<Room in config>', () => {
     it('should be retured null if waiting customer is not exist,', () => {
       removeCustomerRoom('davin', 'consultantTwo');
       expect(arrangeConsultantRoom('consultantTwo')).to.eql(null);
+    });
+  });
+
+  describe('<function disconnectCustomer>', () => {
+    it('should be removed if customer disconnect', () => {
+      const consultantOneCustomers = roomList['consultantOne'];
+      expect(consultantOneCustomers[0].nickname).to.eql('ken');
+      disconnectCustomer(mockSocketIdOne);
+      expect(consultantOneCustomers[0].nickname).to.eql('minsun');
+
+      const consultantTWoCustomers = roomList['consultantTwo'];
+      expect(consultantTWoCustomers[0].nickname).to.eql('davin');
+      disconnectCustomer(mockSocketIdThree);
+      expect(consultantTWoCustomers[0]).to.eql(undefined);
     });
   });
 });

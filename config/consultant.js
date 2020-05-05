@@ -6,8 +6,10 @@ const addConsultants = (consultant, id) => {
 };
 
 const findConsultant = (consultant) => {
-  const trimmedConsultant = consultant.trim();
-  return consultantList[trimmedConsultant] || null;
+  if (consultant) {
+    const trimmedConsultant = consultant.trim();
+    return consultantList[trimmedConsultant] || null;
+  }
 };
 
 const removeConsultant = (consultant) => {
