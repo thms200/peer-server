@@ -2,7 +2,8 @@ const {
   arrangeCustomerRoom,
   removeCustomerRoom,
   getCustomers,
-  arrangeConsultantRoom
+  arrangeConsultantRoom,
+  disconnectCustomer,
 } = require('./rooms');
 
 const {
@@ -97,6 +98,16 @@ module.exports = (io) => {
         callback('상담 모드가 종료되었습니다. on 버튼을 누르시면 다시 상담 모드가 됩니다.');
       } catch (error) {
         console.warn(error);
+      }
+    });
+
+    socket.on('disconnect', () => {
+      const consultant = disconnectCustomer(socket.id);
+
+      const consultantId = findConsultant(consultant);
+      if (consultantId) {
+        const currentCustomers = getCustomers(consultant);
+        io.to(consultantId).emit('currentCustomers', currentCustomers);
       }
     });
   });

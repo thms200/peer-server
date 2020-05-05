@@ -58,10 +58,25 @@ const arrangeConsultantRoom = (consultant) => {
   return null;
 };
 
+const disconnectCustomer = (customerId) => {
+  let leftCustomer = [];
+  for (let seller in roomList) {
+    const customers = roomList[seller];
+    for (let i = 0; i < customers.length; i++) {
+      if (customers[i].id === customerId) {
+        leftCustomer = customers.splice(i, 1);
+        break;
+      }
+    }
+  }
+  return !leftCustomer.length ? null : leftCustomer[0].consultant;
+};
+
 module.exports = {
   roomList,
   arrangeCustomerRoom,
   removeCustomerRoom,
   getCustomers,
   arrangeConsultantRoom,
+  disconnectCustomer,
 };

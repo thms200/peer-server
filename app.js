@@ -8,7 +8,7 @@ const { ERROR } = require('./constants');
 
 const app = express();
 const server = require('http').createServer(app);
-const io = require('socket.io')(server);
+const io = require('socket.io')(server, { pingTimeout: 5000 });
 require('./config/socket')(io);
 
 app.use(cors());
