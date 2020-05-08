@@ -28,6 +28,9 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use('/api/users', require('./routes/users'));
 app.use('/api/customers', require('./routes/customers'));
+app.use('/', (req, res) => {
+  res.send('connect!!!!');
+});
 
 server.listen(process.env.PORT, () => console.log('server connection..'));
 
