@@ -25,7 +25,7 @@ jobs:
             - run:
                 name: Deploy to env
                 command: |
-                  eb deploy Peer-env
+                  eb deploy Withpeer-env
 
 workflows:
   automated-deploy:
