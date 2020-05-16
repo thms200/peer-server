@@ -4,7 +4,7 @@
 * [Features](https://github.com/thms200/peer-server#Features)
 * [Tech Stack](https://github.com/thms200/peer-server#Tech-Stack)
 * [Install](https://github.com/thms200/peer-server#Install)
-* [Consulting Bot Use (for CDN)](https://github.com/thms200/peer-server#Consulting-Bot-Use-(for-CDN))
+* [Consulting Bot Use (for CDN)](https://github.com/thms200/peer-server#Consulting-Bot-Use-for-CDN)
 * [Deploy](https://github.com/thms200/peer-server#Deploy)
 * [Project Process](https://github.com/thms200/peer-server#Project-Process)
 * [Challenges](https://github.com/thms200/peer-server#challenges)

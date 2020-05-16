@@ -13,6 +13,7 @@ const {
 } = require('./consultant');
 
 module.exports = (io) => {
+  io.listen(3030);
   io.on('connection', (socket) => {
     socket.on('joinCustomer', (customerInfo, callback) => {
       try {
