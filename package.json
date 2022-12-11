@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "aws-sdk": "^2.664.0",
-    "body-parser": "^1.19.0",
+    "body-parser": "^1.20.1",
     "cors": "^2.8.5",
     "debug": "~2.6.9",
     "dotenv": "^8.2.0",
